@@ -1,13 +1,12 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
-#include <iterator>
 #include <regex>
 #include <vector>
 using namespace std;
 
-#define NUM_WORDS 25322
-#define FILE_NAME "popular.txt"
+#define NUM_WORDS 20000
+#define FILE_NAME "20k.txt"
 
 int main() {
   ifstream fin(FILE_NAME);
@@ -16,9 +15,10 @@ int main() {
     fin >> words[i];
   }
   bool test_mode = false;
-  string test_word, input;
+  string test_word, input, prev_input;
   int guesses = 0;
   vector<char> guessed_ltrs;
+  vector<char> bad_ltrs;
   while (true) {
     if (!test_mode) {
       cin >> input;
@@ -64,10 +64,19 @@ int main() {
         }
       }
       regex regexp(regex_str);
+      if (input == prev_input) {
+        bad_ltrs.push_back(guessed_ltrs.back());
+      }
+      string regex2_str = "[";
+      int len = bad_ltrs.size();
+      for (int i = 0; i < len; i++) {
+        regex2_str += bad_ltrs[i];
+      }
+      regex regexp2(regex2_str+"]");
       bool has_letters[26];
       for (int i = 0; i < NUM_WORDS; i++) {
         int len = words[i].length();
-        if (len != word_len || !regex_match(words[i], regexp)) continue;
+        if (len != word_len || !regex_match(words[i], regexp) || regex_search(words[i], regexp2)) continue;
         total_letters += len;
         fill(has_letters, has_letters+26, false);
         for (int j = 0; j < len; j++) {
@@ -84,14 +93,16 @@ int main() {
     char max_freq_char;
     for (int i = 0; i < 26; i++) {
       char letter = 'a'+i;
-      cout << letter << ": " << letter_freq[i] << endl;
+      cout << letter << ": " << letter_freq[i] << "\t";
       if (letter_freq[i] > max_freq && find(guessed_ltrs.begin(), guessed_ltrs.end(), letter) == guessed_ltrs.end()) {
         max_freq = letter_freq[i];
         max_freq_char = letter;
       }
     }
+    cout << endl;
     guessed_ltrs.push_back(max_freq_char);
     max_freq_char = toupper(max_freq_char);
+    prev_input = input;
     cout << "Guess #" << ++guesses << ": " << max_freq_char << endl;
     if (test_mode) {
       for (int i = 0; i < word_len; i++) {

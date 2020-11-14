@@ -1,7 +1,6 @@
 #include <algorithm>
-#include <cctype>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <regex>
 #include <vector>
 using namespace std;
@@ -10,23 +9,32 @@ using namespace std;
 #define FILE_NAME "popular.txt"
 
 int main() {
-  ios_base::sync_with_stdio(0); cin.tie(0);
   ifstream fin(FILE_NAME);
   string words[NUM_WORDS];
   for (int i = 0; i < NUM_WORDS; i++) {
     fin >> words[i];
   }
-  //for (int i = 0; i < 26; i++) cout << letter_freq[i] << "\n";
-  bool done = false;
+  bool test_mode = false;
+  string test_word, input;
   int guesses = 0;
   vector<char> guessed_ltrs;
   while (true) {
-    string input;
-    cin >> input;
-    if (input.find("_") == string::npos) {
-      break;
+    if (!test_mode) {
+      cin >> input;
     }
     int word_len = input.length();
+    if (input.find("_") == string::npos) {
+      if (guesses == 0) {
+        test_mode = true;
+        test_word = input;
+        input = "";
+        for (int i = 0; i < word_len; i++) {
+          input += "_";
+        }
+      } else {
+        break;
+      }
+    }
     int letter_freq[26] = {0};
     int total_letters = 0;
     if (guesses == 0) {
@@ -67,14 +75,23 @@ int main() {
     char max_freq_char;
     for (int i = 0; i < 26; i++) {
       char letter = 'a'+i;
-      cout << letter << "\t" << letter_freq[i] << endl;
+      //cout << letter << ": " << letter_freq[i] << endl;
       if (letter_freq[i] > max_freq && find(guessed_ltrs.begin(), guessed_ltrs.end(), letter) == guessed_ltrs.end()) {
         max_freq = letter_freq[i];
         max_freq_char = letter;
       }
     }
     guessed_ltrs.push_back(max_freq_char);
+    max_freq_char = toupper(max_freq_char);
     cout << "Guess #" << ++guesses << ": " << max_freq_char << endl;
+    if (test_mode) {
+      for (int i = 0; i < word_len; i++) {
+        if (toupper(test_word[i]) == max_freq_char) {
+          input[i] = max_freq_char;
+        }
+      }
+      cout << input << endl;
+    }
   }
   cout << "Total Guesses: " << guesses << endl;
 }

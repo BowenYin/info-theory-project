@@ -7,10 +7,11 @@
 using namespace std;
 
 #define NUM_WORDS 25322
+#define FILE_NAME "popular.txt"
 
 int main() {
   ios_base::sync_with_stdio(0); cin.tie(0);
-  ifstream fin("popular.txt");
+  ifstream fin(FILE_NAME);
   string words[NUM_WORDS];
   for (int i = 0; i < NUM_WORDS; i++) {
     fin >> words[i];

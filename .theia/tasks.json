@@ -16,6 +16,20 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "type": "shell",
+      "label": "g++ run active file",
+      "command": "./${fileBasenameNoExtension}",
+      "args": [],
+      "options": {
+        "cwd": "${workspaceFolder}/${relativeFileDirname}"
+      },
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
     }
 	]
 }

@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <iterator>
 #include <regex>
 #include <vector>
 using namespace std;
@@ -38,14 +39,18 @@ int main() {
     int letter_freq[26] = {0};
     int total_letters = 0;
     if (guesses == 0) {
+      bool has_letters[26];
       for (int i = 0; i < NUM_WORDS; i++) {
         int len = words[i].length();
         if (len != word_len) continue;
         total_letters += len;
+        fill(has_letters, has_letters+26, false);
         for (int j = 0; j < len; j++) {
           char letter = words[i][j];
-          if (letter >= 'a' && letter <= 'z') {
-            letter_freq[letter-'a']++;
+          int index = letter-'a';
+          if (letter >= 'a' && letter <= 'z' && !has_letters[index]) {
+            letter_freq[index]++;
+            has_letters[index] = true;
           }
         }
       }
@@ -59,14 +64,18 @@ int main() {
         }
       }
       regex regexp(regex_str);
+      bool has_letters[26];
       for (int i = 0; i < NUM_WORDS; i++) {
         int len = words[i].length();
         if (len != word_len || !regex_match(words[i], regexp)) continue;
         total_letters += len;
+        fill(has_letters, has_letters+26, false);
         for (int j = 0; j < len; j++) {
           char letter = words[i][j];
-          if (letter >= 'a' && letter <= 'z') {
-            letter_freq[letter-'a']++;
+          int index = letter-'a';
+          if (letter >= 'a' && letter <= 'z' && !has_letters[index]) {
+            letter_freq[index]++;
+            has_letters[index] = true;
           }
         }
       }
@@ -75,7 +84,7 @@ int main() {
     char max_freq_char;
     for (int i = 0; i < 26; i++) {
       char letter = 'a'+i;
-      //cout << letter << ": " << letter_freq[i] << endl;
+      cout << letter << ": " << letter_freq[i] << endl;
       if (letter_freq[i] > max_freq && find(guessed_ltrs.begin(), guessed_ltrs.end(), letter) == guessed_ltrs.end()) {
         max_freq = letter_freq[i];
         max_freq_char = letter;

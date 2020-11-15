@@ -18,6 +18,7 @@ int main() {
     fin >> weights[i];
   }
   const float MAX_WEIGHT = weights[0];
+  const float MIN_WEIGHT = weights[NUM_WORDS-1];
   bool test_mode = false;
   string test_word, input, prev_input;
   int guesses = 0;
@@ -53,7 +54,7 @@ int main() {
           char letter = words[i][j];
           int index = letter-'a';
           if (letter >= 'a' && letter <= 'z' && !has_letters[index]) {
-            letter_freq[index] += sqrt(weights[i]/MAX_WEIGHT);
+            letter_freq[index] += log2(weights[i]/MIN_WEIGHT);
             has_letters[index] = true;
           }
         }
@@ -87,7 +88,7 @@ int main() {
           char letter = words[i][j];
           int index = letter-'a';
           if (letter >= 'a' && letter <= 'z' && !has_letters[index]) {
-            letter_freq[index] += sqrt(weights[i]/MAX_WEIGHT);
+            letter_freq[index] += log2(weights[i]/MIN_WEIGHT);
             has_letters[index] = true;
           }
         }

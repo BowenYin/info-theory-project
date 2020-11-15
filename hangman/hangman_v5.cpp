@@ -6,10 +6,12 @@
 #include <vector>
 using namespace std;
 
+#define weight_fn(i) log2(weights[i]/weights[NUM_WORDS-1])
+
 int main(int argc, char *argv[]) {
   const string FILE_NAME = argc > 1 ? argv[1] : "/workspace/info-theory/hangman/unigram_freq.txt";
   const int NUM_WORDS = argc > 2 ? stoi(argv[2]) : 100000;
-  const int WEIGHT_CAP_VALS = argc > 3 ? stoi(argv[3]) : 600;
+  const int WEIGHT_CAP_VALS = argc > 3 ? stoi(argv[3]) : 660;
   ifstream fin(FILE_NAME);
   string words[NUM_WORDS];
   long weights[NUM_WORDS];
@@ -17,8 +19,6 @@ int main(int argc, char *argv[]) {
     fin >> words[i];
     fin >> weights[i];
   }
-  const float MAX_WEIGHT = weights[0];
-  const float MIN_WEIGHT = weights[NUM_WORDS-1];
   for (int i = 0; i < WEIGHT_CAP_VALS; i++) {
     weights[i] = weights[WEIGHT_CAP_VALS-1];
   }
@@ -46,19 +46,17 @@ int main(int argc, char *argv[]) {
       }
     }
     double letter_freq[26] = {0.0};
-    int total_letters = 0;
     if (guesses == 0) {
       bool has_letters[26];
       for (int i = 0; i < NUM_WORDS; i++) {
         int len = words[i].length();
         if (len != word_len) continue;
-        total_letters += len;
         fill(has_letters, has_letters+26, false);
         for (int j = 0; j < len; j++) {
           char letter = words[i][j];
           int index = letter-'a';
           if (letter >= 'a' && letter <= 'z' && !has_letters[index]) {
-            letter_freq[index] += log2(weights[i]/MIN_WEIGHT);
+            letter_freq[index] += weight_fn(i);
             has_letters[index] = true;
           }
         }
@@ -83,17 +81,33 @@ int main(int argc, char *argv[]) {
       }
       regex regexp2(regex2_str+"]");
       bool has_letters[26];
+      bool found_match = false;
       for (int i = 0; i < NUM_WORDS; i++) {
         int len = words[i].length();
         if (len != word_len || !regex_match(words[i], regexp) || regex_search(words[i], regexp2)) continue;
-        total_letters += len;
         fill(has_letters, has_letters+26, false);
         for (int j = 0; j < len; j++) {
           char letter = words[i][j];
           int index = letter-'a';
           if (letter >= 'a' && letter <= 'z' && !has_letters[index]) {
-            letter_freq[index] += log2(weights[i]/MIN_WEIGHT);
-            has_letters[index] = true;
+            letter_freq[index] += weight_fn(i);
+            has_letters[index] = found_match = true;
+          }
+        }
+      }
+      if (!found_match) {
+        fill(letter_freq, letter_freq+26, 0.0);
+        for (int i = 0; i < NUM_WORDS; i++) {
+          int len = words[i].length();
+          if (len != word_len) continue;
+          fill(has_letters, has_letters+26, false);
+          for (int j = 0; j < len; j++) {
+            char letter = words[i][j];
+            int index = letter-'a';
+            if (letter >= 'a' && letter <= 'z' && !has_letters[index]) {
+              letter_freq[index] += weight_fn(i);
+              has_letters[index] = true;
+            }
           }
         }
       }

@@ -6,8 +6,8 @@
 #include <vector>
 using namespace std;
 
-#define NUM_WORDS 50000
-#define FILE_NAME "/workspace/info-theory/hangman/freq_gcide.txt"
+#define NUM_WORDS 20000
+#define FILE_NAME "/workspace/info-theory/hangman/unigram_freq.txt"
 
 int main() {
   ifstream fin(FILE_NAME);

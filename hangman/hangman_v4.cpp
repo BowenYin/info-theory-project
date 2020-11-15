@@ -6,8 +6,9 @@
 #include <vector>
 using namespace std;
 
-#define NUM_WORDS 50000
+#define NUM_WORDS 100000
 #define FILE_NAME "/workspace/info-theory/hangman/unigram_freq.txt"
+#define WEIGHT_CAP_VALS 500
 
 int main() {
   ifstream fin(FILE_NAME);
@@ -19,6 +20,9 @@ int main() {
   }
   const float MAX_WEIGHT = weights[0];
   const float MIN_WEIGHT = weights[NUM_WORDS-1];
+  for (int i = 0; i < WEIGHT_CAP_VALS; i++) {
+    weights[i] = weights[WEIGHT_CAP_VALS-1];
+  }
   bool test_mode = false;
   string test_word, input, prev_input;
   int guesses = 0;
@@ -26,9 +30,10 @@ int main() {
   vector<char> bad_ltrs;
   while (true) {
     if (!test_mode) {
+      cout << "> ";
       cin >> input;
     }
-    int word_len = input.length();
+    const int word_len = input.length();
     if (input.find("_") == string::npos) {
       if (guesses == 0) {
         test_mode = true;

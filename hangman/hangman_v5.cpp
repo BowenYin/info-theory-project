@@ -6,11 +6,10 @@
 #include <vector>
 using namespace std;
 
-#define NUM_WORDS 100000
-#define FILE_NAME "/workspace/info-theory/hangman/unigram_freq.txt"
-#define WEIGHT_CAP_VALS 660
-
-int main() {
+int main(int argc, char *argv[]) {
+  const string FILE_NAME = argc > 1 ? argv[1] : "/workspace/info-theory/hangman/unigram_freq.txt";
+  const int NUM_WORDS = argc > 2 ? stoi(argv[2]) : 100000;
+  const int WEIGHT_CAP_VALS = argc > 3 ? stoi(argv[3]) : 600;
   ifstream fin(FILE_NAME);
   string words[NUM_WORDS];
   long weights[NUM_WORDS];

@@ -6,7 +6,7 @@
 #include <vector>
 using namespace std;
 
-#define NUM_WORDS 20000
+#define NUM_WORDS 50000
 #define FILE_NAME "/workspace/info-theory/hangman/unigram_freq.txt"
 
 int main() {
@@ -17,6 +17,7 @@ int main() {
     fin >> words[i];
     fin >> weights[i];
   }
+  const float MAX_WEIGHT = weights[0];
   bool test_mode = false;
   string test_word, input, prev_input;
   int guesses = 0;
@@ -39,7 +40,7 @@ int main() {
         break;
       }
     }
-    float letter_freq[26] = {0.0};
+    double letter_freq[26] = {0.0};
     int total_letters = 0;
     if (guesses == 0) {
       bool has_letters[26];
@@ -52,7 +53,7 @@ int main() {
           char letter = words[i][j];
           int index = letter-'a';
           if (letter >= 'a' && letter <= 'z' && !has_letters[index]) {
-            letter_freq[index] += log2(weights[i]);
+            letter_freq[index] += sqrt(weights[i]/MAX_WEIGHT);
             has_letters[index] = true;
           }
         }
@@ -86,7 +87,7 @@ int main() {
           char letter = words[i][j];
           int index = letter-'a';
           if (letter >= 'a' && letter <= 'z' && !has_letters[index]) {
-            letter_freq[index] += log2(weights[i]);
+            letter_freq[index] += sqrt(weights[i]/MAX_WEIGHT);
             has_letters[index] = true;
           }
         }

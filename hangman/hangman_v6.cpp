@@ -1,18 +1,24 @@
 #include <algorithm>
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <regex>
 #include <vector>
 using namespace std;
 
-#define NUM_WORDS 20000
-#define FILE_NAME "list_gcide.txt"
+#define weight_fn(i) i < PRIMARY_WORDS ? WEIGHT_FACTOR-(i+0.0)/PRIMARY_WORDS : PRIMARY_WORDS/(i+0.0)/WEIGHT_FACTOR
 
-int main() {
+int main(int argc, char *argv[]) {
+  const string FILE_NAME = argc > 1 ? argv[1] : "/workspace/info-theory/hangman/freq_gcide.txt";
+  const int NUM_WORDS = argc > 2 ? stoi(argv[2]) : 65536;
+  const int PRIMARY_WORDS = argc > 3 ? stoi(argv[3]) : 15000;
+  const int WEIGHT_FACTOR = argc > 4 ? stoi(argv[4]) : 100;
   ifstream fin(FILE_NAME);
   string words[NUM_WORDS];
+  long weights[NUM_WORDS];
   for (int i = 0; i < NUM_WORDS; i++) {
     fin >> words[i];
+    fin >> weights[i];
   }
   bool test_mode = false;
   string test_word, input, prev_input;
@@ -21,9 +27,10 @@ int main() {
   vector<char> bad_ltrs;
   while (true) {
     if (!test_mode) {
+      cout << "> ";
       cin >> input;
     }
-    int word_len = input.length();
+    const int word_len = input.length();
     if (input.find("_") == string::npos) {
       if (guesses == 0) {
         test_mode = true;
@@ -36,21 +43,21 @@ int main() {
         break;
       }
     }
-    int letter_freq[26] = {0};
-    int total_letters = 0;
+    double letter_freq[26] = {0.0};
+    int matches = 0;
     if (guesses == 0) {
       bool has_letters[26];
       for (int i = 0; i < NUM_WORDS; i++) {
         int len = words[i].length();
         if (len != word_len) continue;
-        total_letters += len;
         fill(has_letters, has_letters+26, false);
         for (int j = 0; j < len; j++) {
           char letter = words[i][j];
           int index = letter-'a';
           if (letter >= 'a' && letter <= 'z' && !has_letters[index]) {
-            letter_freq[index]++;
+            letter_freq[index] += weight_fn(i);
             has_letters[index] = true;
+            matches++;
           }
         }
       }
@@ -74,17 +81,34 @@ int main() {
       }
       regex regexp2(regex2_str+"]");
       bool has_letters[26];
+      bool found_match = false;
       for (int i = 0; i < NUM_WORDS; i++) {
         int len = words[i].length();
         if (len != word_len || !regex_match(words[i], regexp) || regex_search(words[i], regexp2)) continue;
-        total_letters += len;
         fill(has_letters, has_letters+26, false);
         for (int j = 0; j < len; j++) {
           char letter = words[i][j];
           int index = letter-'a';
           if (letter >= 'a' && letter <= 'z' && !has_letters[index]) {
-            letter_freq[index]++;
-            has_letters[index] = true;
+            letter_freq[index] += weight_fn(i);
+            has_letters[index] = found_match = true;
+            matches++;
+          }
+        }
+      }
+      if (!found_match) {
+        fill(letter_freq, letter_freq+26, 0.0);
+        for (int i = 0; i < NUM_WORDS; i++) {
+          int len = words[i].length();
+          if (len != word_len) continue;
+          fill(has_letters, has_letters+26, false);
+          for (int j = 0; j < len; j++) {
+            char letter = words[i][j];
+            int index = letter-'a';
+            if (letter >= 'a' && letter <= 'z' && !has_letters[index]) {
+              letter_freq[index] += weight_fn(i);
+              has_letters[index] = true;
+            }
           }
         }
       }
@@ -99,7 +123,7 @@ int main() {
         max_freq_char = letter;
       }
     }
-    cout << endl;
+    cout << "\nMatches: " << matches << endl;
     guessed_ltrs.push_back(max_freq_char);
     max_freq_char = toupper(max_freq_char);
     prev_input = input;

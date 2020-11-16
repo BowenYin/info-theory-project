@@ -6,12 +6,12 @@
 #include <vector>
 using namespace std;
 
-#define weight_fn(i) log2(weights[i]/weights[NUM_WORDS-1])
+#define weight_fn(i) log2((weights[i]+0.0)/weights[NUM_WORDS-1])
 
 int main(int argc, char *argv[]) {
   const string FILE_NAME = argc > 1 ? argv[1] : "/workspace/info-theory/hangman/unigram_freq.txt";
   const int NUM_WORDS = argc > 2 ? stoi(argv[2]) : 100000;
-  const int WEIGHT_CAP_VALS = argc > 3 ? stoi(argv[3]) : 660;
+  const int WEIGHT_CAP_VALS = argc > 3 ? stoi(argv[3]) : 600;
   ifstream fin(FILE_NAME);
   string words[NUM_WORDS];
   long weights[NUM_WORDS];

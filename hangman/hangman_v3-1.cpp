@@ -5,7 +5,7 @@
 #include <vector>
 using namespace std;
 
-#define NUM_WORDS 20000
+#define NUM_WORDS 15000
 #define FILE_NAME "list_gcide.txt"
 
 int main() {
@@ -18,7 +18,6 @@ int main() {
   string test_word, input, prev_input;
   int guesses = 0;
   vector<char> guessed_ltrs;
-  vector<char> bad_ltrs;
   while (true) {
     if (!test_mode) {
       cin >> input;
@@ -56,27 +55,22 @@ int main() {
       }
     } else {
       string regex_str = "";
+      string regex2_str = "[^";
+      for (int i = 0; i < guesses; i++) {
+        regex2_str += guessed_ltrs[i];
+      }
       for (int i = 0; i < word_len; i++) {
         if (input[i] == '_') {
-          regex_str += ".";
+          regex_str += regex2_str+"]";
         } else {
           regex_str += tolower(input[i]);
         }
       }
       regex regexp(regex_str);
-      if (input == prev_input) {
-        bad_ltrs.push_back(guessed_ltrs.back());
-      }
-      string regex2_str = "[";
-      int len = bad_ltrs.size();
-      for (int i = 0; i < len; i++) {
-        regex2_str += bad_ltrs[i];
-      }
-      regex regexp2(regex2_str+"]");
       bool has_letters[26];
       for (int i = 0; i < NUM_WORDS; i++) {
         int len = words[i].length();
-        if (len != word_len || !regex_match(words[i], regexp) || regex_search(words[i], regexp2)) continue;
+        if (len != word_len || !regex_match(words[i], regexp)) continue;
         total_letters += len;
         fill(has_letters, has_letters+26, false);
         for (int j = 0; j < len; j++) {

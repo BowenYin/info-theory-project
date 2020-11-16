@@ -9,8 +9,8 @@ using namespace std;
 #define weight_fn(i) i < PRIMARY_WORDS ? WEIGHT_FACTOR-(i+0.0)/PRIMARY_WORDS : PRIMARY_WORDS/(i+0.0)/WEIGHT_FACTOR
 
 int main(int argc, char *argv[]) {
-  const string FILE_NAME = argc > 1 ? argv[1] : "list_gcide.txt";
-  const int NUM_WORDS = argc > 2 ? stoi(argv[2]) : 65536;
+  const string FILE_NAME = argc > 1 ? argv[1] : "list_filtered.txt";
+  const int NUM_WORDS = argc > 2 ? stoi(argv[2]) : 78735;
   const int PRIMARY_WORDS = argc > 3 ? stoi(argv[3]) : 15000;
   const int WEIGHT_FACTOR = argc > 4 ? stoi(argv[4]) : 100;
   ifstream fin(FILE_NAME);

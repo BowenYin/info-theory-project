@@ -109,13 +109,13 @@ int main(int argc, char *argv[]) {
     char max_freq_char;
     for (int i = 0; i < 26; i++) {
       char letter = 'a'+i;
-      cout << letter << ": " << letter_freq[i] << "\t";
+      //cout << letter << ": " << letter_freq[i] << "\t";
       if (letter_freq[i] > max_freq && find(guessed_ltrs.begin(), guessed_ltrs.end(), letter) == guessed_ltrs.end()) {
         max_freq = letter_freq[i];
         max_freq_char = letter;
       }
     }
-    cout << "\nMatches: " << matches << endl;
+    //cout << "\nMatches: " << matches << endl;
     guessed_ltrs.push_back(max_freq_char);
     max_freq_char = toupper(max_freq_char);
     prev_input = input;

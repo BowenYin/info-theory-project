@@ -12,7 +12,7 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
   const bool DEBUG = argc > 1 ? stoi(argv[1]) : false;
-  const string FILE_NAME = argc > 2 ? argv[2] : "unigram_checked_wordnet.txt";
+  const string FILE_NAME = argc > 2 ? argv[2] : "unigram_list.txt";
   const int NUM_WORDS = argc > 3 ? stoi(argv[3]) : 50000;
   const int PRIMARY_WORDS = argc > 4 ? stoi(argv[4]) : 15000;
   const int WEIGHT_FACTOR = argc > 5 ? stoi(argv[5]) : 100;
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
         for (int j = 0; j < len; j++) { // go thru letters in word
           char letter = words[i][j];
           int index = letter-'a';
-          if (letter >= 'a' && letter <= 'z' && !has_letters[index]) {
+          if (letter >= 'a' && letter <= 'z') {
             letter_freq[index] += weight_fn(i);
             has_letters[index] = is_match = true;
           }
@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
         for (int j = 0; j < len; j++) { // go thru letters in word
           char letter = words[i][j];
           int index = letter-'a';
-          if (letter >= 'a' && letter <= 'z' && !has_letters[index]) {
+          if (letter >= 'a' && letter <= 'z') {
             letter_freq[index] += weight_fn(i);
             has_letters[index] = is_match = found_match = true;
           }
@@ -109,7 +109,7 @@ int main(int argc, char *argv[]) {
           for (int j = 0; j < len; j++) {
             char letter = words[i][j];
             int index = letter-'a';
-            if (letter >= 'a' && letter <= 'z' && !has_letters[index]) {
+            if (letter >= 'a' && letter <= 'z') {
               letter_freq[index] += weight_fn(i);
               has_letters[index] = true;
             }

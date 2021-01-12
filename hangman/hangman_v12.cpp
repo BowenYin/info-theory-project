@@ -7,12 +7,9 @@
 #include <limits>
 #include <regex>
 #include <string>
+#include <sstream>
 #include <vector>
 using namespace std;
-
-//###########################################
-//##  NEED TO IMPLEMENT LIE HANDLING ASAP  ##
-//###########################################
 
 #define weight_fn(i) i < PRIMARY_WORDS ? WEIGHT_FACTOR-(i+0.0)/PRIMARY_WORDS : PRIMARY_WORDS/(i+0.0)/WEIGHT_FACTOR
 
@@ -40,6 +37,13 @@ int main(int argc, char *argv[]) {
       cout << "> ";
       getline(cin, input);
       transform(input.begin(), input.end(), input.begin(), ::toupper);
+      regex allowed_chars("[A-Z ]");
+      for (int i = input.length(); i >= 0; i--) {
+        string s;
+        s.push_back(input[i]);
+        if (!regex_match(s, allowed_chars))
+          input.erase(i, 1);
+      }
       test_phrase = input;
       if (input == prev_input) wrong_ltrs.push_back(guessed_ltrs[guesses-1]);
       for (int i = 0; i < input.length(); i++)

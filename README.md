@@ -38,4 +38,13 @@ Modified v8 so that it counts all letters in the frequency instead of just one l
 #### hangman/hangman-v10.cpp
 Support multiple word phrases instead of just single words. Each word is evaluated independently.
 
+#### hangman/hangman-v11.cpp
+Fixed some edge case bugs, cleaned up some code, and improved some user experience.
+
+#### hangman/hangman-v11-1.cpp
+Fixed bug where the weight sum undercounted duplicate letters in a word.
+
+#### hangman/hangman-v12.cpp
+Allows up to one lie, where the user says a letter is not in the word when it actually is.
+
 ## Battleship

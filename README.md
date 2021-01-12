@@ -35,4 +35,7 @@ Chooses letters near a certain threshold of frequency/total instead of always ch
 #### hangman/hangman_v8-1.cpp
 Modified v8 so that it counts all letters in the frequency instead of just one letter per word
 
+#### hangman/hangman-v10.cpp
+Support multiple word phrases instead of just single words. Each word is evaluated independently.
+
 ## Battleship

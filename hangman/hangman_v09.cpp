@@ -53,18 +53,15 @@ int main(int argc, char *argv[]) {
     double sum_weights = 0.0; // sum of weights of matched words
     vector<string> matched_words;
     if (guesses == 0) { // for the 1st guess, simply counts letter frequencies
-      bool has_letters[26];
       for (int i = 0; i < NUM_WORDS; i++) { // go thru word list
         int len = words[i].length();
         if (len != word_len) continue;
-        fill(has_letters, has_letters+26, false);
         for (int j = 0; j < len; j++) { // go thru letters in word
           char letter = words[i][j];
           int index = letter-'a';
           if (letter >= 'a' && letter <= 'z') {
             letter_freq[index] += weight_fn(i);
             letter_count[index]++;
-            has_letters[index] = true;
           }
         }
         matches++;
@@ -84,19 +81,17 @@ int main(int argc, char *argv[]) {
         }
       }
       regex regexp(regex_str);
-      bool has_letters[26];
       bool found_match = false;
       for (int i = 0; i < NUM_WORDS; i++) { // go thru word list
         int len = words[i].length();
         if (len != word_len || !regex_match(words[i], regexp)) continue;
-        fill(has_letters, has_letters+26, false);
         for (int j = 0; j < len; j++) { // go thru letters in word
           char letter = words[i][j];
           int index = letter-'a';
           if (letter >= 'a' && letter <= 'z') {
             letter_freq[index] += weight_fn(i);
             letter_count[index]++;
-            has_letters[index] = found_match = true;
+            found_match = true;
           }
         }
         matches++;
@@ -108,13 +103,11 @@ int main(int argc, char *argv[]) {
         for (int i = 0; i < NUM_WORDS; i++) {
           int len = words[i].length();
           if (len != word_len) continue;
-          fill(has_letters, has_letters+26, false);
           for (int j = 0; j < len; j++) {
             char letter = words[i][j];
             int index = letter-'a';
             if (letter >= 'a' && letter <= 'z') {
               letter_freq[index] += weight_fn(i);
-              has_letters[index] = true;
             }
           }
         }
@@ -134,7 +127,7 @@ int main(int argc, char *argv[]) {
           max_freq_char = letter;
         }
       }
-      if (max_freq/sum_weights < 0.5 || max_freq_char == prev_max_freq_char) {
+      if (max_freq/sum_weights < 1-(guesses+1.0)/26 || max_freq_char == prev_max_freq_char) {
         done = true;
         if (i > 0) max_freq_char = prev_max_freq_char;
       }

@@ -14018,6 +14018,7 @@ dynastic
 curate
 gaping
 trailed
+trailhead
 reclaim
 turpentine
 fathom
@@ -21727,6 +21728,7 @@ smother
 interplanetary
 macroeconomics
 encoder
+decoder
 ust
 evidential
 undisguised

@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
       cout << "> ";
       getline(cin, input);
       transform(input.begin(), input.end(), input.begin(), ::toupper);
-      regex allowed_chars("[A-Z ]");
+      regex allowed_chars("[A-Z_ ]");
       for (int i = input.length(); i >= 0; i--) {
         string s;
         s.push_back(input[i]);

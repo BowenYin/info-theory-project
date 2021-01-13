@@ -183,7 +183,7 @@ int main(int argc, char *argv[]) {
           max_freq_char = letter;
         }
       }
-      if (true || max_freq/sum_weights < 1-(guesses+1.0)/26 || max_freq_char == prev_max_freq_char) {
+      if (max_freq/sum_weights < 1-(guesses+1.0)/26 || max_freq_char == prev_max_freq_char) {
         done = true;
         if (i > 0) max_freq_char = prev_max_freq_char;
       }

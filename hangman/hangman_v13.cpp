@@ -12,23 +12,23 @@ using namespace std;
 #define weight_fn(i) i < PRIMARY_WORDS ? WEIGHT_FACTOR-(i+0.0)/PRIMARY_WORDS : PRIMARY_WORDS/(i+0.0)/WEIGHT_FACTOR
 
 int main(int argc, char *argv[]) {
-  const bool DEBUG = argc > 1 ? stoi(argv[1]) : false;
-  const string FILE_NAME = argc > 2 ? argv[2] : "unigram_list.txt";
-  const int NUM_WORDS = argc > 3 ? stoi(argv[3]) : 85000;
-  const int PRIMARY_WORDS = argc > 4 ? stoi(argv[4]) : 15000;
-  const int SECONDARY_WORDS = argc > 4 ? stoi(argv[5]) : 50000;
-  const int WEIGHT_FACTOR = argc > 6 ? stoi(argv[6]) : 100;
+  const bool DEBUG = argc > 1 ? stoi(argv[1]) : false; // prints debug info
+  const string FILE_NAME = argc > 2 ? argv[2] : "unigram_list.txt"; // word list sorted by frequency
+  const int NUM_WORDS = argc > 3 ? stoi(argv[3]) : 85000; // number of words to parse
+  const int PRIMARY_WORDS = argc > 4 ? stoi(argv[4]) : 15000; // give higher weights to these words
+  const int SECONDARY_WORDS = argc > 4 ? stoi(argv[5]) : 50000; // don't guess past these words unless necessary
+  const int WEIGHT_FACTOR = argc > 6 ? stoi(argv[6]) : 100; // multiplier for primary words
   ifstream fin(FILE_NAME);
   string words[NUM_WORDS];
   for (int i = 0; i < NUM_WORDS; i++) { // read word list
     fin >> words[i];
   }
-  bool test_mode = false; // test mode if actual letters are entered instead of blanks
+  bool test_mode = false; // uses test mode if actual letters are entered instead of blanks
   string test_phrase, input, prev_input, input_phrase = "";
   vector<string> test_words, input_words;
   int guesses = 0;
   vector<char> guessed_ltrs, wrong_ltrs;
-  bool has_lied = false;
+  bool has_lied = false; // if the maximum of 1 allowed lie has been used
   cout << "Enter the word or phrase, replacing any unguessed letters with underscores." << endl;
   chrono::high_resolution_clock::time_point begin;
   while (true) {
@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
       getline(cin, input);
       transform(input.begin(), input.end(), input.begin(), ::toupper);
       regex allowed_chars("[A-Z_ ]");
-      for (int i = input.length(); i >= 0; i--) {
+      for (int i = input.length(); i >= 0; i--) { // remove irrelevant characters
         string s;
         s.push_back(input[i]);
         if (!regex_match(s, allowed_chars))
@@ -109,7 +109,7 @@ int main(int argc, char *argv[]) {
             if (find(wrong_ltrs.begin(), wrong_ltrs.end(), guessed_ltrs[i]) == wrong_ltrs.end())
               regex2_str += guessed_ltrs[i];
           }
-          if (scenario > 0) {
+          if (scenario > 0) { // allow for the possibility of a lie
             string orig_str = regex_str;
             regex_str = "[";
             regex_str += wrong_ltrs[scenario-1];
@@ -149,7 +149,7 @@ int main(int argc, char *argv[]) {
             }
           }
           if (!found_match) { // if no matches, fallback to just using letter frequencies
-            fill(letter_freq, letter_freq+26, 0.0);
+            fill(letter_freq, letter_freq+26, 0.0); // same as above, probably should refactor
             for (int i = 0; i < NUM_WORDS; i++) {
               int len = words[i].length();
               if (len != word_len) continue;
@@ -176,7 +176,7 @@ int main(int argc, char *argv[]) {
       for (int j = 0; j < 26; j++) { // find max frequency letter closest to 50% of weight sum
         char letter = 'a'+j;
         if (DEBUG) cout << letter << ": " << letter_freq[j] << "\t";
-        if (letter_freq[j] > max_freq && letter_freq[j] < prev_max_freq
+        if (letter_freq[j] > max_freq && letter_freq[j] < prev_max_freq // exclude guessed letters except lies
             && (find(guessed_ltrs.begin(), guessed_ltrs.end(), letter) == guessed_ltrs.end()
             || !has_lied && find(wrong_ltrs.begin(), wrong_ltrs.end(), letter) != wrong_ltrs.end())) {
           max_freq = letter_freq[j];

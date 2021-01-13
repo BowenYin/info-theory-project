@@ -35,16 +35,19 @@ Chooses letters near a certain threshold of frequency/total instead of always ch
 #### hangman/hangman_v8-1.cpp
 Modified v8 so that it counts all letters in the frequency instead of just one letter per word
 
-#### hangman/hangman-v10.cpp
+#### hangman/hangman_v10.cpp
 Support multiple word phrases instead of just single words. Each word is evaluated independently.
 
-#### hangman/hangman-v11.cpp
+#### hangman/hangman_v11.cpp
 Fixed some edge case bugs, cleaned up some code, and improved some user experience.
 
-#### hangman/hangman-v11-1.cpp
+#### hangman/hangman_v11-1.cpp
 Fixed bug where the weight sum undercounted duplicate letters in a word.
 
-#### hangman/hangman-v12.cpp
+#### hangman/hangman_v12.cpp
 Allows up to one lie, where the user says a letter is not in the word when it actually is.
+
+#### hangman/hangman_v13.cpp
+Modification to exclude words after a certain point in the list from being guessed in full.
 
 ## Battleship

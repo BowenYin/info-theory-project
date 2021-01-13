@@ -1,13 +1,11 @@
 #include <algorithm>
 #include <chrono>
 #include <cmath>
-#include <cstddef>
 #include <fstream>
 #include <iostream>
 #include <limits>
 #include <regex>
 #include <string>
-#include <sstream>
 #include <vector>
 using namespace std;
 
@@ -16,9 +14,10 @@ using namespace std;
 int main(int argc, char *argv[]) {
   const bool DEBUG = argc > 1 ? stoi(argv[1]) : false;
   const string FILE_NAME = argc > 2 ? argv[2] : "unigram_list.txt";
-  const int NUM_WORDS = argc > 3 ? stoi(argv[3]) : 50000;
+  const int NUM_WORDS = argc > 3 ? stoi(argv[3]) : 85000;
   const int PRIMARY_WORDS = argc > 4 ? stoi(argv[4]) : 15000;
-  const int WEIGHT_FACTOR = argc > 5 ? stoi(argv[5]) : 100;
+  const int SECONDARY_WORDS = argc > 4 ? stoi(argv[5]) : 50000;
+  const int WEIGHT_FACTOR = argc > 6 ? stoi(argv[6]) : 100;
   ifstream fin(FILE_NAME);
   string words[NUM_WORDS];
   for (int i = 0; i < NUM_WORDS; i++) { // read word list
@@ -67,6 +66,7 @@ int main(int argc, char *argv[]) {
     int matches[num_words]; // number of words that match
     for (int i = 0; i < num_words; i++) matches[i] = 0;
     vector<string> matched_words[num_words];
+    bool secondary_ok = false;
     for (int index = 0; index < num_words; index++) {
       input = input_words[index];
       const int word_len = input.length();
@@ -143,7 +143,10 @@ int main(int argc, char *argv[]) {
             }
             matches[index]++;
             sum_weights += (weight_fn(i))*max_multiplier*prob_factor;
-            matched_words[index].push_back(words[i]);
+            if (i < SECONDARY_WORDS || secondary_ok || matched_words[index].size() == 0) {
+              matched_words[index].push_back(words[i]);
+              if (i >= SECONDARY_WORDS) secondary_ok = true;
+            }
           }
           if (!found_match) { // if no matches, fallback to just using letter frequencies
             fill(letter_freq, letter_freq+26, 0.0);
@@ -180,7 +183,7 @@ int main(int argc, char *argv[]) {
           max_freq_char = letter;
         }
       }
-      if (max_freq/sum_weights < 1-(guesses+1.0)/26 || max_freq_char == prev_max_freq_char) {
+      if (true || max_freq/sum_weights < 1-(guesses+1.0)/26 || max_freq_char == prev_max_freq_char) {
         done = true;
         if (i > 0) max_freq_char = prev_max_freq_char;
       }

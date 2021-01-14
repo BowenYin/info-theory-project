@@ -99,7 +99,8 @@ int main() {
           board[max_i][j] = 3;
           ship_len++;
         } else break;
-      ships.erase(remove(ships.begin(), ships.end(), ship_len), ships.end());
+      auto it = find(ships.begin(), ships.end(), ship_len);
+      ships.erase(it);
     }
     if (ships.size() == 0) break;
   }

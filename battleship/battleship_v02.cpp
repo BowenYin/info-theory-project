@@ -15,7 +15,7 @@ int main() {
     for (int j = 0; j < 10; j++)
       board[i][j] = 0;
   int guesses = 0;
-  cout << "Reply to each guess with 'hit', 'miss', or 'sink'." << endl;
+  cout << "Reply to each guess with 'hit', 'miss', or 'sunk'." << endl;
   while (true) {
     for (int i = 0; i < 10; i++)
       for (int j = 0; j < 10; j++)

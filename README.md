@@ -51,3 +51,9 @@ Allows up to one lie, where the user says a letter is not in the word when it ac
 Modification to exclude words after a certain point in the list from being guessed in full.
 
 ## Battleship
+
+#### battleship/battleship_v01.cpp
+Just testing out different methods of determining a ship that's sunk.
+
+#### battleship/battleship_v02.cpp
+Simplified code and algorithm, uses probability densities.

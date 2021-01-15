@@ -8,9 +8,9 @@ using namespace std;
 #define contains(vec, el) (find(vec.begin(), vec.end(), el) != vec.end())
 
 int main() {
-  int board[10][10]; // 0 for unvisited, 1 for miss, 2 for hit, 3 for sink
+  int board[10][10]; // 0 for unvisited, 1 for miss, 2 for hit, 3 for sunk
   int probs[10][10];
-  vector<int> ships = {2, 3, 3, 4, 5};
+  vector<int> ships = {2, 3, 3, 4, 5}; // lengths of ships
   for (int i = 0; i < 10; i++)
     for (int j = 0; j < 10; j++)
       board[i][j] = 0;
@@ -75,7 +75,7 @@ int main() {
       board[max_i][max_j] = 1;
     } else if (input.substr(0, 1) == "h") // hit
       board[max_i][max_j] = 2;
-    else if (input.substr(0, 1) == "s") { // sink
+    else if (input.substr(0, 1) == "s") { // sunk
       if (ships.size() <= 1) break;
       board[max_i][max_j] = 3;
       int ship_len = 1;
@@ -101,8 +101,9 @@ int main() {
         } else break;
       auto it = find(ships.begin(), ships.end(), ship_len); // remove sunken ship from list
       ships.erase(it);
+      cout << ships.size() << " ship" << (ships.size() == 1 ? "" : "s") << " remaining." << endl;
     }
-    if (ships.size() == 0) break;
+    if (ships.size() == 0) break; // all ships
   }
   cout << "Total Guesses: " << guesses << endl;
 }

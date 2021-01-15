@@ -56,4 +56,5 @@ Modification to exclude words after a certain point in the list from being guess
 Just testing out different methods of determining a ship that's sunk.
 
 #### battleship/battleship_v02.cpp
-Simplified code and algorithm, uses probability densities.
+Simplified code and algorithm, uses computed probability densities.
+![](https://87f7290bbb154c8753a737c7b24a6d1e.m.pipedream.net/info-theory-project)

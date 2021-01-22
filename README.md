@@ -1,5 +1,3 @@
-# Info Theory Project
-
 ## Hangman
 
 #### hangman/hangman_v01.cpp

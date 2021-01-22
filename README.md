@@ -52,29 +52,29 @@ Modification to exclude words after a certain point in the list from being guess
 
 ### Benchmarking
 
-Here are a few sample words/phrases and the corresponding number of guesses taken.
+Here are a few sample words/phrases and the corresponding number of guesses taken:
 
 - `information theory` (6 guesses)
-- `theoretical`: (4 guesses)
-- `entropy`: (4 guesses)
-- `calculus`: (6 guesses)
-- `derivative`: (5 guesses)
-- `integral`: (4 guesses)
-- `differential equation`: (5 guesses)
-- `polynomial division`: (5 guesses)
-- `partial differentiation`: (10 guesses)
-- `channel capacity`: (7 guesses)
-- `raze`: (11 guesses)
-- `rate`: (5 guesses)
-- `zoom`: (13 guesses)
-- `room`: (7 guesses)
-- `leave a star`: (7 guesses)
+- `theoretical` (4 guesses)
+- `entropy` (4 guesses)
+- `calculus` (6 guesses)
+- `derivative` (5 guesses)
+- `integral` (4 guesses)
+- `differential equation` (5 guesses)
+- `polynomial division` (5 guesses)
+- `partial differentiation` (10 guesses)
+- `channel capacity` (7 guesses)
+- `raze` (11 guesses)
+- `rate` (5 guesses)
+- `zoom` (13 guesses)
+- `room` (7 guesses)
+- `leave a star` (7 guesses)
 
 ### Caveats
 
-The program currently doesn't consider the logical relationship between words if more than one word is given as input, i.e. `information theory` and `information banana` would have the same likelihood if both of the second words had the same likelihood. However, it does consider each word's invididual likelihood in the English language, i.e. the standalone word `theory` is more common than `banana`.
+The program currently doesn't consider the logical relationship between words if more than one word is given as input, i.e. `information theory` and `information banana` would have the same likelihood if both of the second words had the same likelihood. However, it does consider each word's invididual likelihood in the English language, i.e. the freestanding word `theory` is more common than `banana`.
 
-Time: `O(n)`, n = length of word list
+**Time:** `O(n)`, n = length of word list
 
 ## Battleship
 
@@ -87,5 +87,5 @@ Simplified code and algorithm, uses computed probability densities.
 ### Notes
 The program will find the point that can be occupied by the greatest number of ships given the current state of the game. Assuming a random placement of ships, this will be the optimal position (the algorithm is deterministic).
 
-Time: `O(n²)`, n = length of game board
+**Time:** `O(n²)`, n = size of game board
 ![](https://87f7290bbb154c8753a737c7b24a6d1e.m.pipedream.net/info-theory-project)

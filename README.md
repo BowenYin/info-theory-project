@@ -85,7 +85,7 @@ Just testing out different methods of determining a ship that's sunk.
 Simplified code and algorithm, uses computed probability densities.
 
 ### Notes
-The program will find the point that can be occupied by the greatest number of ships given the current state of the game. Assuming a random placement of ships, this will be the optimal position (the algorithm is deterministic).
+The program will find the point that can be occupied by the greatest number of ships given the current state of the game, with a weight bonus for ships occupying a position already marked as a hit. Assuming a random placement of ships, this will be the optimal position (the algorithm is deterministic).
 
 **Time:** `O(n²)`, n = size of game board
 ![](https://87f7290bbb154c8753a737c7b24a6d1e.m.pipedream.net/info-theory-project)
